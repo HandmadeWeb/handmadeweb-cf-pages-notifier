@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/handmadeweb/handmadeweb-cf-pages-notifier
  * Description: Handmade Web - CF Pages Notifier
  * Author: Handmade Web
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author URI: https://www.handmadeweb.com.au/
  * GitHub Plugin URI: https://github.com/handmadeweb/handmadeweb-cf-pages-notifier
  * Primary Branch: main
