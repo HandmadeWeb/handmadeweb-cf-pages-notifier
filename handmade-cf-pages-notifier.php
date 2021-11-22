@@ -26,7 +26,13 @@ if (!class_exists('HMW_CF_PAGES_NOTIFIER') && defined('HMW_CF_PAGES_NOTIFIER_TRI
 
         public static function init()
         {
-            static::$deployment_trigger_url = HMW_CF_PAGES_NOTIFIER_TRIGGER_URL;
+            $deployment_trigger_url = HMW_CF_PAGES_NOTIFIER_TRIGGER_URL;
+
+            if (!is_array($deployment_trigger_url)) {
+                $deployment_trigger_url = [$deployment_trigger_url];
+            }
+
+            static::$deployment_trigger_url = $deployment_trigger_url;
 
             if (static::hasPendingDeployment()) {
                 add_action('admin_notices', [static::class, 'pendingDeploymentNotice'], 1);
@@ -79,8 +85,16 @@ if (!class_exists('HMW_CF_PAGES_NOTIFIER') && defined('HMW_CF_PAGES_NOTIFIER_TRI
 
         public static function runPendingDeployment()
         {
-            $request = wp_remote_post(static::$deployment_trigger_url);
-            if (!$request instanceof WP_Error) {
+            $failedRequest = false;
+
+            foreach (static::$deployment_trigger_url as $trigger_url) {
+                $request = wp_remote_post(static::$deployment_trigger_url);
+                if ($request instanceof WP_Error) {
+                    $failedRequest = true;
+                }
+            }
+
+            if ($failedRequest) {
                 static::clearPendingDeployment();
             }
 
