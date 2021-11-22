@@ -85,20 +85,24 @@ if (!class_exists('HMW_CF_PAGES_NOTIFIER') && defined('HMW_CF_PAGES_NOTIFIER_TRI
 
         public static function runPendingDeployment()
         {
-            $failedRequest = false;
+            $success = true;
+
+            $requests = [];
 
             foreach (static::$deployment_trigger_url as $trigger_url) {
                 $request = wp_remote_post(static::$deployment_trigger_url);
+                $requests[] = $request;
+
                 if ($request instanceof WP_Error) {
-                    $failedRequest = true;
+                    $success = false;
                 }
             }
 
-            if (!$failedRequest) {
+            if ($success) {
                 static::clearPendingDeployment();
             }
 
-            return $request;
+            return $requests;
         }
 
         public static function setPendingDeployment(): bool
