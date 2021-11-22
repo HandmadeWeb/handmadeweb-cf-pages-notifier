@@ -21,8 +21,8 @@ if (!class_exists('HMW_CF_PAGES_NOTIFIER') && defined('HMW_CF_PAGES_NOTIFIER_TRI
 
     class HMW_CF_PAGES_NOTIFIER
     {
-        protected static string $option_key = 'HMW_CF_PAGES_NOTIFIER_pending_deployment';
-        protected static string $deployment_trigger_url;
+        protected static $option_key = 'HMW_CF_PAGES_NOTIFIER_pending_deployment';
+        protected static $deployment_trigger_url;
 
         public static function init()
         {
