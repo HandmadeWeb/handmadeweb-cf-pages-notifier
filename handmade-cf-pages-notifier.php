@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/handmadeweb/handmadeweb-cf-pages-notifier
  * Description: Handmade Web - CF Pages Notifier
  * Author: Handmade Web
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author URI: https://www.handmadeweb.com.au/
  * GitHub Plugin URI: https://github.com/handmadeweb/handmadeweb-cf-pages-notifier
  * Primary Branch: main
@@ -26,13 +26,7 @@ if (!class_exists('HMW_CF_PAGES_NOTIFIER') && defined('HMW_CF_PAGES_NOTIFIER_TRI
 
         public static function init()
         {
-            $deployment_trigger_url = HMW_CF_PAGES_NOTIFIER_TRIGGER_URL;
-
-            if (!is_array($deployment_trigger_url)) {
-                $deployment_trigger_url = [$deployment_trigger_url];
-            }
-
-            static::$deployment_trigger_url = $deployment_trigger_url;
+            static::$deployment_trigger_url = HMW_CF_PAGES_NOTIFIER_TRIGGER_URL;
 
             if (static::hasPendingDeployment()) {
                 add_action('admin_notices', [static::class, 'pendingDeploymentNotice'], 1);
@@ -85,24 +79,13 @@ if (!class_exists('HMW_CF_PAGES_NOTIFIER') && defined('HMW_CF_PAGES_NOTIFIER_TRI
 
         public static function runPendingDeployment()
         {
-            $success = true;
+            $request = wp_remote_post(static::$deployment_trigger_url);
 
-            $requests = [];
-
-            foreach (static::$deployment_trigger_url as $trigger_url) {
-                $request = wp_remote_post(static::$deployment_trigger_url);
-                $requests[] = $request;
-
-                if ($request instanceof WP_Error) {
-                    $success = false;
-                }
-            }
-
-            if ($success) {
+            if (!$request instanceof WP_Error) {
                 static::clearPendingDeployment();
             }
 
-            return $requests;
+            return $request;
         }
 
         public static function setPendingDeployment(): bool
