@@ -94,7 +94,7 @@ if (!class_exists('HMW_CF_PAGES_NOTIFIER') && defined('HMW_CF_PAGES_NOTIFIER_TRI
                 }
             }
 
-            if ($failedRequest) {
+            if (!$failedRequest) {
                 static::clearPendingDeployment();
             }
 
