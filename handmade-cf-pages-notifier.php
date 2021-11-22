@@ -8,7 +8,7 @@
  * Author URI: https://www.handmadeweb.com.au/
  * GitHub Plugin URI: https://github.com/handmadeweb/handmadeweb-cf-pages-notifier
  * Primary Branch: main
- * Requires at least: 5.0
+ * Requires at least: 4.4
  * Requires PHP: 7.0
  */
 
